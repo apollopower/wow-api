@@ -4,10 +4,10 @@ A small Rust HTTP API built on Dropshot. Its intended purpose is to serve a play
 
 ## Endpoints
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/health` | TODO |
-| GET | `/api/character/{realm}/{name}` | TODO |
+| Method | Path |
+|--------|------|
+| GET | `/health` |
+| GET | `/api/character/{realm}/{name}` |
 
 ## Run
 
@@ -25,10 +25,10 @@ cargo test
 
 ## Configuration
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `WOW_API_BIND` | `127.0.0.1:8080` | TODO |
-| `BNET_CLIENT_ID` | — | TODO (planned) |
-| `BNET_CLIENT_SECRET` | — | TODO (planned) |
+| Variable | Default |
+|----------|---------|
+| `WOW_API_BIND` | `127.0.0.1:8080` |
+| `BNET_CLIENT_ID` | — |
+| `BNET_CLIENT_SECRET` | — |
 
 
