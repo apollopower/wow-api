@@ -1,1 +1,11 @@
+# Build output
 /target
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Editor and OS noise
+.DS_Store
+*.swp
