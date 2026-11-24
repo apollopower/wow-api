@@ -1,20 +1,21 @@
 //! State shared by every request handler.
 
+use std::sync::Arc;
 use std::time::Instant;
 
-use crate::bnet::BnetClient;
+use crate::bnet::BnetApi;
 
 /// Dropshot gives each handler a `&ApiContext`.
 ///
-/// The Battle.net client is shared, so its connection pool and token cache are
-/// reused across requests. Cloning is cheap; `BnetClient` is built for this.
+/// `bnet` is a trait object, so production can use the real Battle.net client
+/// while tests use an in-memory fake.
 pub struct ApiContext {
     pub started_at: Instant,
-    pub bnet: BnetClient,
+    pub bnet: Arc<dyn BnetApi>,
 }
 
 impl ApiContext {
-    pub fn new(bnet: BnetClient) -> Self {
+    pub fn new(bnet: Arc<dyn BnetApi>) -> Self {
         Self {
             started_at: Instant::now(),
             bnet,

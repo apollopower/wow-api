@@ -4,7 +4,10 @@
 //! logging, the route table, and the server. The route table and handlers live
 //! in the library crate so they can be tested.
 
+use std::sync::Arc;
+
 use dropshot::{ConfigDropshot, ConfigLogging, ConfigLoggingLevel, ServerBuilder};
+use wow_api::bnet::{BnetApi, BnetClient};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -22,7 +25,7 @@ async fn main() -> anyhow::Result<()> {
     // `SocketAddr` is `Copy`, so we can save it before moving the rest of the
     // config into the Battle.net client.
     let bind_address = config.bind_address;
-    let bnet = wow_api::bnet::BnetClient::new(config)?;
+    let bnet: Arc<dyn BnetApi> = Arc::new(BnetClient::new(config)?);
     let context = wow_api::context::ApiContext::new(bnet);
 
     let api = wow_api::api::api_description()?;

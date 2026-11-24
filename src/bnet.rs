@@ -162,17 +162,44 @@ impl BnetClient {
     ///
     /// `realm` is a realm slug such as `tichondrius`; `name` is the character
     /// name. Battle.net character names are case-insensitive.
-    pub async fn character(&self, realm: &str, name: &str) -> Result<CharacterSummary, BnetError> {
+    async fn fetch_character(
+        &self,
+        realm: &str,
+        name: &str,
+    ) -> Result<CharacterSummary, BnetError> {
         let path = format!("/profile/wow/character/{realm}/{name}");
         self.get(&path, &self.config.region.profile_namespace())
             .await
     }
 
     /// Item details from the static game-data namespace.
-    pub async fn item(&self, id: u64) -> Result<Item, BnetError> {
+    async fn fetch_item(&self, id: u64) -> Result<Item, BnetError> {
         let path = format!("/data/wow/item/{id}");
         self.get(&path, &self.config.region.static_namespace())
             .await
+    }
+}
+
+/// The Battle.net operations the HTTP handlers need.
+///
+/// Rust concept: handlers depend on this trait, not on `BnetClient` directly.
+/// Production uses `BnetClient`; tests use a fake that returns canned data.
+/// Keeping the trait small makes the fake trivial to write.
+#[async_trait::async_trait]
+pub trait BnetApi: Send + Sync {
+    async fn character(&self, realm: &str, name: &str) -> Result<CharacterSummary, BnetError>;
+
+    async fn item(&self, id: u64) -> Result<Item, BnetError>;
+}
+
+#[async_trait::async_trait]
+impl BnetApi for BnetClient {
+    async fn character(&self, realm: &str, name: &str) -> Result<CharacterSummary, BnetError> {
+        self.fetch_character(realm, name).await
+    }
+
+    async fn item(&self, id: u64) -> Result<Item, BnetError> {
+        self.fetch_item(id).await
     }
 }
 
