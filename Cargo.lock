@@ -353,6 +353,8 @@ checksum = "1aaf95b3e5c8f23aa320147307562d361db0ae0d51242340f558153b4eb2439b"
 [[package]]
 name = "dropshot"
 version = "0.18.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4a9e64e150bf661306cc9fa32c25996cb37025edebcbe55e80669750aa90b703"
 dependencies = [
  "async-compression",
  "async-stream",
@@ -402,6 +404,8 @@ dependencies = [
 [[package]]
 name = "dropshot_endpoint"
 version = "0.18.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c7dfe21674cd808e8b344cc9d3ea107108846effc782c535ddf0bd2753443226"
 dependencies = [
  "heck",
  "proc-macro2",

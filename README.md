@@ -1,5 +1,7 @@
 # wow-api
 
+[![CI](https://github.com/apollopower/wow-api/actions/workflows/ci.yml/badge.svg)](https://github.com/apollopower/wow-api/actions/workflows/ci.yml)
+
 A small Rust HTTP API built on Dropshot. Its intended purpose is to serve a player's World of Warcraft game data from the Battle.net API.
 
 ## Prerequisites

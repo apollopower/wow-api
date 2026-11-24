@@ -7,7 +7,7 @@ edition = "2024"
 anyhow = "1"
 async-trait = "0.1"
 dotenvy = "0.15"
-dropshot = { path = "../dropshot/dropshot" }
+dropshot = "0.18.0"
 reqwest = { version = "0.13", default-features = false, features = ["form", "json", "query", "rustls"] }
 schemars = "0.8.22"
 serde = { version = "1", features = ["derive"] }
