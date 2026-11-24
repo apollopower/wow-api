@@ -2,24 +2,22 @@
 
 use std::time::Instant;
 
+use crate::bnet::BnetClient;
+
 /// Dropshot gives each handler a `&ApiContext`.
 ///
-/// Later this will also hold the Battle.net client. Keeping state in one place
-/// means handlers never construct their own HTTP clients or re-read config.
+/// The Battle.net client is shared, so its connection pool and token cache are
+/// reused across requests. Cloning is cheap; `BnetClient` is built for this.
 pub struct ApiContext {
     pub started_at: Instant,
+    pub bnet: BnetClient,
 }
 
 impl ApiContext {
-    pub fn new() -> Self {
+    pub fn new(bnet: BnetClient) -> Self {
         Self {
             started_at: Instant::now(),
+            bnet,
         }
-    }
-}
-
-impl Default for ApiContext {
-    fn default() -> Self {
-        Self::new()
     }
 }

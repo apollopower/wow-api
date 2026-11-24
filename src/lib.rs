@@ -5,5 +5,6 @@
 //! and exercise the real router.
 
 pub mod api;
+pub mod bnet;
 pub mod config;
 pub mod context;

@@ -5,11 +5,13 @@ edition = "2024"
 
 [dependencies]
 anyhow = "1"
+dotenvy = "0.15"
 dropshot = { path = "../dropshot/dropshot" }
+reqwest = { version = "0.13", default-features = false, features = ["form", "json", "query", "rustls"] }
 schemars = "0.8.22"
 serde = { version = "1", features = ["derive"] }
 thiserror = "2"
-tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync"] }
 
 [dev-dependencies]
 http = "1"
