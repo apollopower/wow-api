@@ -8,7 +8,6 @@ use serde_json::Value;
 
 use common::test_context;
 
-/// The realm slugs on a page, in the order the server returned them.
 fn slugs(body: &Value) -> Vec<String> {
     body["items"]
         .as_array()
@@ -23,8 +22,7 @@ fn slugs(body: &Value) -> Vec<String> {
         .collect()
 }
 
-/// Page tokens are base64url, so the only character that needs encoding in a
-/// query string is the `=` padding.
+// Page tokens are base64url, so only the `=` padding needs escaping.
 fn query_token(body: &Value) -> String {
     body["next_page"]
         .as_str()
@@ -78,8 +76,6 @@ async fn realms_paginate_to_the_end() {
         .expect("third page should succeed");
     let third: Value = read_json(&mut response).await;
     assert_eq!(slugs(&third), ["tichondrius"]);
-
-    // The final page must not hand out another token.
     assert!(third["next_page"].is_null());
 
     testctx.teardown().await;
@@ -132,8 +128,7 @@ async fn realms_reject_invalid_page_token() {
 async fn realms_reject_zero_limit() {
     let testctx = test_context("realms_reject_zero_limit");
 
-    // `limit` is deserialized as `NonZeroU32`, so zero never reaches the
-    // handler.
+    // `limit` is a `NonZeroU32`, so the extractor rejects zero.
     testctx
         .client_testctx
         .make_request_error(Method::GET, "/api/realms?limit=0", StatusCode::BAD_REQUEST)

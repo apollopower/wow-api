@@ -179,10 +179,7 @@ impl BnetClient {
             .await
     }
 
-    /// Every realm in the configured region.
-    ///
-    /// Battle.net returns the realms in an undocumented order, so pagination
-    /// callers must sort this before using it.
+    /// Every realm in the configured region. Order is not guaranteed.
     async fn fetch_realms(&self) -> Result<Vec<RealmRef>, BnetError> {
         let index: RealmIndex = self
             .get(
@@ -205,7 +202,6 @@ pub trait BnetApi: Send + Sync {
 
     async fn item(&self, id: u64) -> Result<Item, BnetError>;
 
-    /// Every realm in the configured region, in Battle.net's order.
     async fn realms(&self) -> Result<Vec<RealmRef>, BnetError>;
 }
 
@@ -262,10 +258,7 @@ pub struct NamedRef {
     pub name: String,
 }
 
-/// The realm index document.
-///
-/// This is private because it is only a transport shape. Callers get the
-/// `realms` array itself. Serde ignores the `_links` field Battle.net includes.
+/// The realm index document. Only `realms` is used.
 #[derive(Debug, Deserialize)]
 struct RealmIndex {
     realms: Vec<RealmRef>,
