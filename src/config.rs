@@ -75,6 +75,11 @@ impl Region {
     pub fn profile_namespace(self) -> String {
         format!("profile-{}", self.slug())
     }
+
+    /// Namespace for changing game data such as the realm index.
+    pub fn dynamic_namespace(self) -> String {
+        format!("dynamic-{}", self.slug())
+    }
 }
 
 /// Everything the server needs to know that comes from the environment.
@@ -155,6 +160,7 @@ mod tests {
     fn namespaces_use_the_region_slug() {
         assert_eq!(Region::Eu.static_namespace(), "static-eu");
         assert_eq!(Region::Eu.profile_namespace(), "profile-eu");
+        assert_eq!(Region::Eu.dynamic_namespace(), "dynamic-eu");
     }
 
     #[test]

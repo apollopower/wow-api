@@ -178,6 +178,20 @@ impl BnetClient {
         self.get(&path, &self.config.region.static_namespace())
             .await
     }
+
+    /// Every realm in the configured region.
+    ///
+    /// Battle.net returns the realms in an undocumented order, so pagination
+    /// callers must sort this before using it.
+    async fn fetch_realms(&self) -> Result<Vec<RealmRef>, BnetError> {
+        let index: RealmIndex = self
+            .get(
+                "/data/wow/realm/index",
+                &self.config.region.dynamic_namespace(),
+            )
+            .await?;
+        Ok(index.realms)
+    }
 }
 
 /// The Battle.net operations the HTTP handlers need.
@@ -190,6 +204,9 @@ pub trait BnetApi: Send + Sync {
     async fn character(&self, realm: &str, name: &str) -> Result<CharacterSummary, BnetError>;
 
     async fn item(&self, id: u64) -> Result<Item, BnetError>;
+
+    /// Every realm in the configured region, in Battle.net's order.
+    async fn realms(&self) -> Result<Vec<RealmRef>, BnetError>;
 }
 
 #[async_trait::async_trait]
@@ -200,6 +217,10 @@ impl BnetApi for BnetClient {
 
     async fn item(&self, id: u64) -> Result<Item, BnetError> {
         self.fetch_item(id).await
+    }
+
+    async fn realms(&self) -> Result<Vec<RealmRef>, BnetError> {
+        self.fetch_realms().await
     }
 }
 
@@ -239,6 +260,15 @@ pub struct CharacterSummary {
 pub struct NamedRef {
     pub id: u64,
     pub name: String,
+}
+
+/// The realm index document.
+///
+/// This is private because it is only a transport shape. Callers get the
+/// `realms` array itself. Serde ignores the `_links` field Battle.net includes.
+#[derive(Debug, Deserialize)]
+struct RealmIndex {
+    realms: Vec<RealmRef>,
 }
 
 /// A realm reference, which includes the URL-friendly `slug`.
