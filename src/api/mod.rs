@@ -3,6 +3,7 @@
 pub mod character;
 pub mod health;
 pub mod item;
+pub mod realms;
 
 use dropshot::{ApiDescription, ApiDescriptionRegisterError, HttpError};
 
@@ -19,6 +20,7 @@ pub fn api_description() -> Result<ApiDescription<ApiContext>, ApiDescriptionReg
     api.register(health::health)?;
     api.register(character::get_character)?;
     api.register(item::get_item)?;
+    api.register(realms::list_realms)?;
     Ok(api)
 }
 

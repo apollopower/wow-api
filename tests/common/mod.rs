@@ -100,6 +100,37 @@ impl BnetApi for FakeBnet {
             is_stackable: false,
         })
     }
+
+    async fn realms(&self) -> Result<Vec<RealmRef>, BnetError> {
+        // Deliberately not sorted: the endpoint is responsible for ordering.
+        Ok(vec![
+            RealmRef {
+                id: 1,
+                slug: "tichondrius".to_string(),
+                name: "Tichondrius".to_string(),
+            },
+            RealmRef {
+                id: 2,
+                slug: "area-52".to_string(),
+                name: "Area 52".to_string(),
+            },
+            RealmRef {
+                id: 3,
+                slug: "stormrage".to_string(),
+                name: "Stormrage".to_string(),
+            },
+            RealmRef {
+                id: 4,
+                slug: "illidan".to_string(),
+                name: "Illidan".to_string(),
+            },
+            RealmRef {
+                id: 5,
+                slug: "proudmoore".to_string(),
+                name: "Proudmoore".to_string(),
+            },
+        ])
+    }
 }
 
 /// Start the real router with a fake Battle.net client and a test logger.

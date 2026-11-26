@@ -15,6 +15,11 @@ A [Battle.net API Developer account](https://community.developer.battle.net/) is
 | GET | `/health` |
 | GET | `/api/character/{realm}/{name}` |
 | GET | `/api/item/{id}` |
+| GET | `/api/realms` |
+
+`GET /api/realms` is paginated. Pass `limit` to choose a page size and send the
+previous response's `next_page` value as `page_token`. Tokens are opaque; do not
+parse them. When `next_page` is `null`, the scan is complete.
 
 ## Run
 

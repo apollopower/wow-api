@@ -28,3 +28,25 @@ async fn live_item_lookup() {
     assert!(!item.name.is_empty());
     println!("{} ({})", item.name, item.quality.name);
 }
+
+#[tokio::test]
+#[ignore = "requires live Battle.net credentials and network access"]
+async fn live_realm_index() {
+    dotenvy::dotenv().ok();
+
+    let config = Config::from_env().expect("config should load from .env");
+    let client = BnetClient::new(config).expect("client should build");
+
+    let realms = client
+        .realms()
+        .await
+        .expect("realm index lookup should succeed");
+
+    assert!(!realms.is_empty(), "realm index should not be empty");
+    assert!(
+        realms.iter().all(|realm| !realm.slug.is_empty()),
+        "every realm should have a slug"
+    );
+
+    println!("{} realms", realms.len());
+}
